@@ -1,0 +1,24 @@
+project:
+  type: book
+
+book:
+  title: "Deep-learning-for-coders-julia"
+  author: "Norah Jones"
+  date: "05/08/2023"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - Chapter_4.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+

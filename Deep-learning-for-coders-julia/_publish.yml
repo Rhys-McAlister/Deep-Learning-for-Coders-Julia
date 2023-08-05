@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 91bb8eb9-a617-4c0f-b7e9-445dc6d18cc0
+      url: 'https://rhysmcalister.quarto.pub/deep-learning-for-coders-julia'
