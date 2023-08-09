@@ -19,6 +19,7 @@ In the original book, the FastAI vision library will download the MNIST dataset 
 Below we can see a visualisation of two examples of the images found within these datasets. The images are either a handwritten three or a seven. 
 
 ```{julia}
+# import Pkg; Pkg.activate(".")
 using MLDatasets
 using Images
 using Plots
@@ -46,3 +47,13 @@ three_features[4:10,4:10,1]
 ```
 
 ## First try: Pixel Similarity
+
+For a first approach to solving the issue of distinguishing between a photo of a three or a seven, we begin by calculating the average pixel value of every pixel for both a 3 and a 7. This provides us two group averages that we can consider to be the 'ideal' 3 and 7. Then a comparsion between a given image and these two averages will help us classify said image. 
+
+::: {.callout-tip}
+## Baseline
+
+A baseline model is a simple model that you are confident will perform reasonably well. Ideally these models should be easy to implement and test such that we have the ability to reference the performance of our new and more complex models against. This is an important place to begin as without a baseline inplace we can't really judge if our new and fancy models are actually performing that well. 
+:::
+
+Let's begin by calculating the average of the pixel values for our 3s and 7s. 

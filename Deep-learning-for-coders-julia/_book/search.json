@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Deep-learning-for-coders-julia",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books."
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  },
+  {
+    "objectID": "Chapter_4.html#pixels-the-foundations-of-computer-vision",
+    "href": "Chapter_4.html#pixels-the-foundations-of-computer-vision",
+    "title": "2  Under the Hood: Training a Digit Classifier",
+    "section": "2.1 Pixels: The Foundations of Computer Vision",
+    "text": "2.1 Pixels: The Foundations of Computer Vision\nIn an effort to understand the internals of computer vision models, we first begin by discussing how computers handle images. The dataset used to illustrate this concept will be MNIST.\nIn the original book, the FastAI vision library will download the MNIST dataset to your computer and place the images into separate folders depending upon the identity of the image and its position in the train or validation sets. For simplicity here we use the MLDatasets package instead.\nBelow we can see a visualisation of two examples of the images found within these datasets. The images are either a handwritten three or a seven.\n\n# import Pkg; Pkg.activate(\".\")\nusing MLDatasets\nusing Images\nusing Plots\n\ndataset = MLDatasets.MNIST(:train)\nvalid = MLDatasets.MNIST(:test)\n\nthree_features = (dataset.features[:,:,dataset.targets .== 3]) / 255\nseven_features = (dataset.features[:,:,dataset.targets .== 7]) / 255\nvalid_three_features = (valid.features[:,:,valid.targets .== 3]) / 255\nvalid_seven_features = (valid.features[:,:,valid.targets .== 7]) / 255\n\nPlots.heatmap(three_features[:,:,1])\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\nPlots.heatmap(seven_features[:,:,9])\n\n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n  \n    \n  \n\n\n\n\n\n\n\n\nIn a computer everything is represented using numbers and images are no exception. Here we see a small section of the image of a three. Each of the numbers within this array is representative of a pixel within the image.\n\nthree_features[4:10,4:10,1]\n\n7×7 Matrix{Float32}:\n 0.0  0.0  0.0  0.0          0.0         0.0         0.0\n 0.0  0.0  0.0  0.0          0.0         0.0         0.0\n 0.0  0.0  0.0  0.0          0.0         0.0         0.0\n 0.0  0.0  0.0  0.0          0.0         0.0         0.0\n 0.0  0.0  0.0  0.0          0.0         0.0         0.0\n 0.0  0.0  0.0  0.0          0.0         0.0         0.0\n 0.0  0.0  0.0  0.000661284  0.00273741  0.00167628  6.15148f-5"
+  },
+  {
+    "objectID": "Chapter_4.html#first-try-pixel-similarity",
+    "href": "Chapter_4.html#first-try-pixel-similarity",
+    "title": "2  Under the Hood: Training a Digit Classifier",
+    "section": "2.2 First try: Pixel Similarity",
+    "text": "2.2 First try: Pixel Similarity"
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "3  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever."
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  }
+]
