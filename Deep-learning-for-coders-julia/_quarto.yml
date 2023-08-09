@@ -2,8 +2,8 @@ project:
   type: book
 
 book:
-  title: "Deep-learning-for-coders-julia"
-  author: "Norah Jones"
+  title: "Deep learning for coders julia"
+  author: "Rhys McAlister"
   date: "05/08/2023"
   chapters:
     - index.qmd

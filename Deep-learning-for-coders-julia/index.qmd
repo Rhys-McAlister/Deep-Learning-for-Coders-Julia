@@ -1,5 +1,7 @@
 # Preface {.unnumbered}
 
-This is a Quarto book.
+This book is my work in progress interpretation of the excellent [Practical Deep Learning for Coders](https://course.fast.ai/) book written by Jeremy Howard and Sylvain Gugger. This book is being rewritten as a way of better learning the material in addition to the Julia language as well as providing a resource to those who wish to explore deep learning in Julia.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+::: {.callout-warning}
+Forewarning, there will be typos and errors in the code as I will be publicly updating this book as I work on it, thanks for understanding!
+:::
