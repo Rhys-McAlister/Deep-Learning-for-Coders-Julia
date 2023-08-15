@@ -202,3 +202,56 @@ println("Accuracy of 7s: ", accuracy_7s)
 
 ## Stochastic Gradient Descent
 
+Arthur Samuel theorised that machine learning would be possible if there existed a means of automatically testing the effectiveness of a given weight assignment and then altering these weights such that the performance of the system could be maximised. If this procedure could be made automatic then he believed that a machine could truly learn from its experiences. If we wish to expand upon and improve our digit classification model we will have to employ Arthurs beliefs and create a system that has both weight assignments and a manner upon which these weights can be automatically improved.
+
+As opposed to our original strategy of examining the difference between a given image and an 'idealised' image, we will instead consider every individual pixel within an image and arrange a set of weights for each pizel, such that the highest weights correspond to pixels most likely to be black for a given category of digit. 
+
+Our aim is to find specific values for our weight vector ($W$) such that the result of our function is high for the digit it represents and low for those it does not. 
+
+Here are the steps we will need to employ in order to change our classification function into a machine learning classifier:
+
+1. Initialise our weights.
+2. For each image, use our weights to predict the identity of the image (3 or 7).
+3. From these predictions quantify the performance of the model (i.e the loss).
+4. Calculate the gradient, from which we can evalute how changing each weight value would influence our loss.
+5. Change the weights (step) based upon the above calculation.
+6. Return to step 2 and repeat the entire process.
+7. Iterate until you decide you are happy with the model or have run out of time.
+
+```{mermaid}
+flowchart LR 
+    A(init) --> B(predict)
+    B --> C(loss)
+    C --> D(gradient)
+    D --> E(step)
+    E --> F(stop)
+    E --> B
+```
+
+Before we begin applying these steps to our MNIST example, lets examine a simpler case of a quadratic that we can use as an example loss function and a parameter x which will stand as a weight parameter for our function. 
+
+
+```{julia}
+"Accepts a number and squares it"
+function squared(x)
+    return x^2 # <1>
+end 
+
+squared(2)
+```
+
+1. Note that in Julia exponents are denoted by the caret symbol (^) as opposed to the double asterix present in python. 
+
+
+```{julia}
+using CairoMakie
+
+f = Figure()
+ax = CairoMakie.Axis(f[1, 1],
+    xlabel = "x",
+    ylabel = "x^2")
+x = range(-2, 2, length=100)
+y = squared.(x)
+lines!(ax, x, y)
+f
+```
