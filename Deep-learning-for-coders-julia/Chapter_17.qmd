@@ -1,0 +1,75 @@
+# A Neural Net from the Foundations
+
+## Matrix Multiplication from Scratch
+
+```{julia}
+using MLDatasets
+```
+
+```{julia}
+# x_train, y_train = MNIST(split=:train)[:]
+x_valid, y_valid = MNIST(split=:test)[:]
+x_valid = Flux.flatten(x_valid)
+```
+
+
+
+```{julia}
+weights = randn(784, 10)
+bias = zeros(10)
+
+m1 = x_valid[:, 1:5]
+m1 = m1'# get five rows from mnist
+m2 = weights 
+ar, ac = size(m1)
+br, bc = size(m2)
+
+(ar, ac), (br, bc)
+```
+
+
+```{julia}
+t1 = zeros(ar, bc)
+size(t1)
+```
+
+
+```{julia}
+for i in range(1, ar)
+    for j in range(1, bc)
+        for k in range(1, ac)
+            t1[i,j] += m1[i,k] * m2[k,j]
+            end
+        end
+    end
+```
+
+```{julia}
+t1
+```
+
+
+```{julia}
+function matmul(a,b)
+    (ar, ac), (br, bc) = size(a), size(b)
+    t1 = zeros(ar, bc)
+    for i in range(1, ar)
+        for j in range(1, bc)
+            for k in range(1, ac)
+                t1[i,j] += m1[i,k] * m2[k,j]
+                end
+            end
+        end
+    return t1
+end
+
+```
+
+```{julia}
+@time matmul(m1,m2)
+```
+
+
+```{julia}
+ar * bc * ac
+```
