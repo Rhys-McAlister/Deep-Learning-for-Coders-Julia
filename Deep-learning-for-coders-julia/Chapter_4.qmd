@@ -35,18 +35,16 @@ Below we can see a visualisation of two examples of the images found within thes
 
 
 dataset = MLDatasets.MNIST(:train)
-valid = MLDatasets.MNIST(:test)
+
 
 three_features = (dataset.features[:,:,dataset.targets .== 3]) / 255
 seven_features = (dataset.features[:,:,dataset.targets .== 7]) / 255
-valid_three_features = (valid.features[:,:,valid.targets .== 3]) / 255
-valid_seven_features = (valid.features[:,:,valid.targets .== 7]) / 255
+
 
 stacked_sevens = permutedims(seven_features, [1, 2, 3])
 stacked_threes = permutedims(three_features, [2, 1, 3])
 
-valid_seven_features = permutedims(valid_seven_features, [1, 2, 3])
-valid_three_features = permutedims(valid_three_features, [2, 1, 3])
+
 
 
 Plots.heatmap(stacked_sevens[:,:,1])
@@ -100,6 +98,8 @@ Plots.heatmap(a_3)
 
 So how do we quantify the distance of a given image from our ideal 3? There are two ways we can approach this issue, we can take the mean of the absolute value of the differences between each pixel, this is referred to as the mean absolute difference (L1 norm). Alternatively, we could take the mean of the squared differences between each pixel and then apply a square root (to undo the squaring). This is called the root mean squared error (RMSE or L2 norm).
 
+Below we see two functions that accept two tensors and calculate either the mean absolute distance or root mean squared error.
+
 ```{julia}
 "Calculates the average absolute distance between two tensors"
 function mean_abs_mnist_distance(a, b)
@@ -136,11 +136,54 @@ sqrt(Flux.Losses.mse(a_3, mean3))
 
 ## Computing Metrics Using Broadcasting
 
+::: {.callout-note}
+A metric is a numeric value calculated based upon our models predictions and the correct labels in our dataset, that tells us how well our model is performing.
+:::
+
+Although both mean squared error and mean absolute error could very well serve as our metrics of choice, these two values are not very interpretable to most people. Thus, the use of accuracy as a metric in the domain of classification models is more often the norm.
+
+Normally, the metric is calculated based on the performance of our model on the validation dataset, however in our pixel similarity model there is no trained component thus there isn't really a risk of overfitting here. To keep with our conventions we will still use a validation set regardless in this problem.
+
+To create a validation set, we remove a portion of the data from training entirely, such that the model doesn't have an opportunity to see this data. Fortunately, the creators of the MNIST dataset have preallocated a portion of the images into training and validation sets and the `MLDatasets` library has presented this dataset accordingly. It is important to note that the same prepartation steps we applied to the training data has been applied to the validation data.
+
+```{julia}
+
+valid = MLDatasets.MNIST(:test)
+valid_three_features = (valid.features[:,:,valid.targets .== 3]) / 255
+valid_seven_features = (valid.features[:,:,valid.targets .== 7]) / 255
+valid_seven_features = permutedims(valid_seven_features, [1, 2, 3])
+valid_three_features = permutedims(valid_three_features, [2, 1, 3])
+```
+
+
+```{julia}
+function prepare_data(dataset)
+    # select 3s and 7s
+    three_feats = (dataset.features[:,:,dataset.targets .== 3]) / 255
+    seven_feats = (dataset.features[:,:,dataset.targets .== 7]) / 255
+
+    # rearrange dimensions
+    three_feats = permutedims(three_feats, [1, 2, 3])
+    seven_feats = permutedims(seven_feats, [2, 1, 3])
+    return three_feats, seven_feats
+end
+```
+
+```{julia}
+tft, sft = prepare_data(valid)
+
+size(tft) == size(valid_three_features)
+```
+
+Our aim now is to create a function called `is_3` that will determine if some image is a 3 or a 7. It will accomplish this by determining which of our two average 3 and 7 images this selected image is closer to. To judge this distance between images we will begin by defining a function that quantifies the distance between two images using the mean absolute error.
+
 ```{julia}
 function mnist_distance(a, b)
     return mean(abs.(a .- b), dims=(1,2))
 end
 ```
+
+We can then apply the following logic to determine if an image is a three or a seven. If the distance between the select image and the average 3 is less than the distance from the average 7 then the image is a three. Below we see this expressed in a function that accepts an image and performs this calculation.
 
 ```{julia}
 function is3(x)
@@ -148,6 +191,7 @@ function is3(x)
 end
 ```
 
+From this simple baseline model we can see that it is performing quite well, however threes and sevens are quite distinct looking images and only represent two out of the possible ten digits! Perhaps it is time to develop a system that is capable of performing actual learning before we progress to this next stage. 
 ```{julia}
 accuracy_3s = mean(is3(valid_three_features))
 accuracy_7s = 1 - mean(is3(valid_seven_features))
@@ -155,4 +199,6 @@ accuracy_7s = 1 - mean(is3(valid_seven_features))
 println("Accuracy of 3s: ", accuracy_3s)
 println("Accuracy of 7s: ", accuracy_7s)
 ```
+
+## Stochastic Gradient Descent
 
